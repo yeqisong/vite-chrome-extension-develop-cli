@@ -26,9 +26,9 @@ var Metalsmith__default = /*#__PURE__*/_interopDefaultLegacy(Metalsmith);
 var Handlebars__default = /*#__PURE__*/_interopDefaultLegacy(Handlebars);
 var spawn__default = /*#__PURE__*/_interopDefaultLegacy(spawn);
 
-var name$1 = "crx3-cli";
+var name$1 = "vite-chrome-extension-develop-cli";
 var version$1 = "1.0.0";
-var description = "no desc";
+var description = "Quickly build the basic project structure of chrome extension development.";
 var main = "libs/index.js";
 var scripts = {
 	build: "rollup -c",
@@ -45,17 +45,11 @@ var keywords = [
 ];
 var author = "yeqisong";
 var license = "MIT";
-var devDependencies = {
-	"@rollup/plugin-babel": "^5.3.0",
-	"@rollup/plugin-commonjs": "^19.0.0",
-	"@rollup/plugin-json": "^4.1.0",
-	"@rollup/plugin-node-resolve": "^13.0.0",
+var dependencies = {
 	chalk: "^4.1.1",
 	commander: "^7.2.0",
 	"cross-spawn": "^7.0.3",
 	"download-git-repo": "^3.0.2",
-	eslint: "^7.28.0",
-	"eslint-plugin-prettier": "^3.4.0",
 	"fs-extra": "^10.0.0",
 	handlebars: "^4.7.7",
 	inquirer: "^8.1.0",
@@ -63,8 +57,16 @@ var devDependencies = {
 	ora: "^5.4.1",
 	"os-locale": "^5.0.0",
 	path: "^0.12.7",
-	prettier: "2.3.1",
-	rollup: "^2.51.1"
+	prettier: "2.3.1"
+};
+var devDependencies = {
+	rollup: "^2.51.1",
+	"@rollup/plugin-babel": "^5.3.0",
+	"@rollup/plugin-commonjs": "^19.0.0",
+	"@rollup/plugin-json": "^4.1.0",
+	"@rollup/plugin-node-resolve": "^13.0.0",
+	eslint: "^7.28.0",
+	"eslint-plugin-prettier": "^3.4.0"
 };
 var require$$0 = {
 	name: name$1,
@@ -76,6 +78,7 @@ var require$$0 = {
 	keywords: keywords,
 	author: author,
 	license: license,
+	dependencies: dependencies,
 	devDependencies: devDependencies
 };
 
