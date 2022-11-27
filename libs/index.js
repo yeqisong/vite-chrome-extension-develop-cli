@@ -13,21 +13,8 @@ var Metalsmith = require('metalsmith');
 var Handlebars = require('handlebars');
 var spawn = require('cross-spawn');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var commander__default = /*#__PURE__*/_interopDefaultLegacy(commander);
-var inquirer__default = /*#__PURE__*/_interopDefaultLegacy(inquirer);
-var fs__default = /*#__PURE__*/_interopDefaultLegacy(fs);
-var osLocale__default = /*#__PURE__*/_interopDefaultLegacy(osLocale);
-var chalk__default = /*#__PURE__*/_interopDefaultLegacy(chalk);
-var download__default = /*#__PURE__*/_interopDefaultLegacy(download);
-var ora__default = /*#__PURE__*/_interopDefaultLegacy(ora);
-var Metalsmith__default = /*#__PURE__*/_interopDefaultLegacy(Metalsmith);
-var Handlebars__default = /*#__PURE__*/_interopDefaultLegacy(Handlebars);
-var spawn__default = /*#__PURE__*/_interopDefaultLegacy(spawn);
-
 var name$1 = "vite-chrome-extension-develop-cli";
-var version$1 = "1.0.0";
+var version$1 = "1.0.2";
 var description = "Quickly build the basic project structure of chrome extension development.";
 var main = "libs/index.js";
 var scripts = {
@@ -86,7 +73,7 @@ var require$$0 = {
  * 当前系统语言
  */
 
-const osLocaleSync = () => osLocale__default['default'].sync();
+const osLocaleSync = () => osLocale.sync();
 /**
  * 检查文件或目录是否存在且可操作
  * @param {*} sdir
@@ -94,7 +81,7 @@ const osLocaleSync = () => osLocale__default['default'].sync();
 
 const canDo = sdir => {
   try {
-    fs__default['default'].accessSync(sdir, fs__default['default'].constants.R_OK | fs__default['default'].constants.W_OK);
+    fs.accessSync(sdir, fs.constants.R_OK | fs.constants.W_OK);
     return true;
   } catch (err) {
     return false;
@@ -106,7 +93,7 @@ const canDo = sdir => {
 
 const isDir = sdir => {
   if (canDo(sdir)) {
-    return fs__default['default'].lstatSync(sdir).isDirectory();
+    return fs.lstatSync(sdir).isDirectory();
   }
 
   return false;
@@ -124,7 +111,7 @@ const isEmptyDir = sdir => {
 
 
   try {
-    const fls = fs__default['default'].readdirSync(sdir);
+    const fls = fs.readdirSync(sdir);
 
     if (!fls.length) {
       return true;
@@ -235,13 +222,13 @@ const generator = (metadata = {}, src, dest = '.') => {
     return Promise.reject(new Error(__msg__('generator fail1') + src));
   }
 
-  const spinner = ora__default['default'](__msg__('generator start')).start();
+  const spinner = ora(__msg__('generator start')).start();
   return new Promise((resolve, reject) => {
-    Metalsmith__default['default'](constants.CWD_DIR).metadata(metadata).clean(false).source(src).destination(dest).use((files, metalsmith, done) => {
+    Metalsmith(constants.CWD_DIR).metadata(metadata).clean(false).source(src).destination(dest).use((files, metalsmith, done) => {
       const meta = metalsmith.metadata();
       Object.keys(files).filter(fileName => constants.PARAM_FILES.indexOf(path.basename(fileName)) > -1).forEach(fileName => {
         const t = files[fileName].contents.toString();
-        files[fileName].contents = Buffer.from(Handlebars__default['default'].compile(t)(meta));
+        files[fileName].contents = Buffer.from(Handlebars.compile(t)(meta));
       });
       done();
     }).build(err => {
@@ -265,8 +252,8 @@ async function installDependencied(projectDir) {
     throw new Error(__msg__('install not found'));
   }
 
-  const spinner = ora__default['default'](__msg__('install start')).start();
-  const r = spawn__default['default'].sync('npm', ['install'], {
+  const spinner = ora(__msg__('install start')).start();
+  const r = spawn.sync('npm', ['install'], {
     stdio: 'inherit',
     cwd: projectDir
   });
@@ -288,14 +275,14 @@ const langOpt = {
 }; // 项目初始设置
 
 async function programPrompt(emptyRoot = true, langSet = false) {
-  return inquirer__default['default'].prompt([{
+  return inquirer.prompt([{
     type: 'input',
     name: 'projectDirName',
     message: `${__msg__('set project dir name')}: `,
     when: () => !emptyRoot,
     validate: val => {
       if (!val.match(enDirName)) {
-        console.log(chalk__default['default'].red(__msg__('set project dir name error')));
+        console.log(chalk.red(__msg__('set project dir name error')));
         return false;
       }
 
@@ -307,7 +294,7 @@ async function programPrompt(emptyRoot = true, langSet = false) {
     message: `${__msg__('set manifest title')}: `,
     validate: val => {
       if (!vLength(5, 30).test(val)) {
-        console.log(chalk__default['default'].red(__msg__('set manifest title error')));
+        console.log(chalk.red(__msg__('set manifest title error')));
         return false;
       }
 
@@ -319,7 +306,7 @@ async function programPrompt(emptyRoot = true, langSet = false) {
     message: `${__msg__('set manifest description')}: `,
     validate: val => {
       if (!vLength(5, 30).test(val)) {
-        console.log(chalk__default['default'].red(__msg__('set manifest description error')));
+        console.log(chalk.red(__msg__('set manifest description error')));
         return false;
       }
 
@@ -344,8 +331,8 @@ async function programPrompt(emptyRoot = true, langSet = false) {
 
 
 const downloadRepo = (target, repo) => new Promise((resolve, reject) => {
-  const spinner = ora__default['default'](__msg__('repo download start')).start();
-  download__default['default'](`direct:${repo}`, target, {
+  const spinner = ora(__msg__('repo download start')).start();
+  download(`direct:${repo}#master`, target, {
     clone: true
   }, err => {
     if (!err) {
@@ -387,16 +374,16 @@ var init = (async options => {
   await downloadRepo(path.join(projectDir, 'gittmp'), constants.REPO).catch(); // 修改模板变量
 
   await generator(projectInfo, path.join(projectDir, 'gittmp'), projectDir).catch(err => {
-    console.log(chalk__default['default'].red(err));
+    console.log(chalk.red(err));
   }); // 安装依赖
 
   await installDependencied(projectDir).catch(err => {
-    console.log(chalk__default['default'].red(err));
+    console.log(chalk.red(err));
   });
-  console.log(chalk__default['default'].green(__msg__('init success')));
+  console.log(chalk.green(__msg__('init success')));
 });
 
-const program = new commander__default['default'].Command();
+const program = new commander.Command();
 program.version(version$1, '-V, --version', 'output the current version').option('-h, --help', 'chrome-extension-devlop-cli help'); // 选项
 // const options = program.opts()
 // 本地语言设置

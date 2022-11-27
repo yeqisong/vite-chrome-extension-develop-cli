@@ -77,7 +77,7 @@ async function programPrompt (emptyRoot = true, langSet = false) {
 // 下载模板
 const downloadRepo = (target, repo) => new Promise((resolve, reject) => {
     const spinner = ora(__msg__('repo download start')).start()
-    download(`direct:${repo}`, target, { clone: true }, err => {
+    download(`direct:${repo}#master`, target, { clone: true }, err => {
         if (!err) {
             spinner.text = __msg__('repo download success')
             spinner.succeed()
